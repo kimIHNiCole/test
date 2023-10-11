@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.spring.ajax.dao.BoardDAO">
+    <select id="bList" resultType="com.spring.ajax.dto.BoardDTO">
+  	SELECT
+  		b.idx
+  		,b.subject
+  		,b.user_name
+  		,b.bHit
+  		,(select count(idx) from photo p where b.idx=p.idx) as img
+  		,b.reg_date
+  		FROM bbs b ORDER BY idx ASC
+  </select>
+  <select id="getPhoto" resultType="String">
+  	SELECT newFileName FROM photo
+  		WHERE idx= #{param1}
+  </select>
+  <delete id="delete">
+  	  	DELETE FROM bbs WHERE idx = #{param1}
+  </delete>
+  </mapper>

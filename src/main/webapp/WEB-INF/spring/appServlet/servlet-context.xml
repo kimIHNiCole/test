@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	
+	<context:component-scan base-package="com.spring.ajax" />
+	
+				
+	<!-- 접속정보 DataSource 로 생성 -->
+	<beans:bean name="datasource" class="org.apache.commons.dbcp.BasicDataSource">
+		<beans:property name="driverClassName" value="org.mariadb.jdbc.Driver"/>
+		<beans:property name="url" value="jdbc:mariadb://localhost:3306/gdj70"/>
+		<beans:property name="username" value="web_user"/>
+		<beans:property name="password" value="pass"/>
+	</beans:bean>
+	
+	<!-- mapper location -->
+	<!-- mapper 에서 xml 사용 설정 -->
+	<beans:bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<!-- DB 접속에 필요한 DataSource 지정 -->
+	<beans:property name="dataSource" ref="datasource"/>
+	<!-- maaper 적용 범위(여기 있는 xml 은 모두 래퍼로 지정하겠다) -->
+	<beans:property name="mapperLocations" value="classpath:com/spring/ajax/dao/*.xml"/>
+	</beans:bean>
+	
+	<!-- mybatis 사용 범위 -->
+	<mybatis-spring:scan base-package="com/spring/ajax/dao"/>
+	
+</beans:beans>
